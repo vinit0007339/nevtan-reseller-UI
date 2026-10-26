@@ -1,0 +1,9 @@
+# NevTan Reseller Program
+
+> Resell the whole NevTan suite (Mail, Drive, Sign, Cloud, Engage, AI) to your clients at 10% off list price, with a $500 minimum order. One reseller account covers every product, and you bill your clients at your own price.
+
+## Pages
+
+- [Reseller Program](https://reseller.nevtan.com/): Who the program is for, how it works, the reseller terms, FAQ, and the application form.
+- [List prices](https://workspace.nevtan.com/pricing): NevTan Workspace plans and list prices, which the reseller discount applies to.
+- [Contact](https://mail.nevtan.com/contact): Questions before applying.
