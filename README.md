@@ -36,6 +36,28 @@ Manager and the Meta Pixel. Both stay off while empty.
 
 ## Deploy
 
+### Docker
+
+```bash
+docker build --build-arg APP_ENV=prod -t nevtan-reseller-ui .     # or APP_ENV=stage
+docker run -p 3000:3000 nevtan-reseller-ui
+```
+
+`APP_ENV` picks which `.env.<profile>` file is compiled in. `NEXT_PUBLIC_*` values are baked in
+at build time, so setting them on the running container does nothing. To change one without
+editing the file, pass it as a build arg, which wins over the file:
+
+```bash
+docker build --build-arg APP_ENV=stage \
+  --build-arg NEXT_PUBLIC_API_BASE_URL=https://stage-reseller-api.nevtan.com \
+  -t nevtan-reseller-ui .
+```
+
+The image runs Next's standalone server (`node server.js`) on port 3000 as a non-root user.
+Because of `output: "standalone"`, `npm start` prints a warning locally. It still works.
+
+### Amplify
+
 `amplify.yml` builds `prod` for the `main`/`prod`/`production` branches and `stage` for everything
 else, the same as the other NevTan UIs.
 

@@ -48,6 +48,8 @@ function buildEnforcedCsp() {
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Emits .next/standalone with a self-contained server.js, which is what the Dockerfile runs.
+  output: "standalone",
   async headers() {
     return [
       {
