@@ -65,10 +65,21 @@ else, the same as the other NevTan UIs.
 
 ```
 src/
-  pages/        Next.js routes: index (the reseller page), robots.txt, sitemap.xml
-  screens/      Reseller.jsx: the page itself
-  component/    SiteHeader, SiteFooter, ProductsMenu
-  constant/     Environment (URLs per profile), products (the NevTan suite)
-  Utility/      axios instance, Meta Pixel helper
+  pages/        Next.js routes: /, /pricing, /products, /products/[slug], /how-it-works,
+                /faq, /apply, 404, robots.txt, sitemap.xml
+  screens/      One component per page
+  component/    Layout, header/footer, plan cards, earnings calculator, application form,
+                WhatsApp chat widget (copied from NevTan Mail), ...
+  constant/     program.js — the reseller terms (discount, minimum order) and all program copy
+                products.js — the NevTan apps; productPages.js — product page copy (from Workspace)
+                Environment.js — URLs per profile; support.js — WhatsApp number
+  Utility/      workspacePricing.js — live NevTan Workspace prices; axios, formatting, Meta Pixel
 ```
+
+Every list price comes live from the NevTan Workspace pricing API. Pages load it on the server
+(refreshed hourly), then the visitor's browser asks again to show the visitor's own currency. That
+second request only works once the Workspace API allows this site: add
+`https://reseller.nevtan.com,https://stage-reseller.nevtan.com` to `WORKSPACE_CORS_ORIGINS` on the
+Workspace API server. Until then visitors see the server's currency, and the browser console shows
+a CORS error for that request.
 # nevtan-reseller-UI

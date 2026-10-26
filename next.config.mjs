@@ -18,6 +18,9 @@ function buildCsp() {
   const connectSrc = [
     "'self'",
     originOnly(process.env.NEXT_PUBLIC_API_BASE_URL),
+    // Live list prices, read from the visitor's browser (src/Utility/workspacePricing.js).
+    "https://api-workspace.nevtan.com",
+    "https://stage-api-workspace.nevtan.com",
     "https://www.google-analytics.com",
     "https://www.facebook.com",
   ].filter(Boolean);
@@ -50,6 +53,11 @@ const nextConfig = {
   poweredByHeader: false,
   // Emits .next/standalone with a self-contained server.js, which is what the Dockerfile runs.
   output: "standalone",
+  experimental: {
+    // Back/forward between pages returns to where the visitor was. A refresh still starts at the
+    // top: _document.jsx turns off the browser's own restore before the page loads.
+    scrollRestoration: true,
+  },
   async headers() {
     return [
       {

@@ -6,10 +6,15 @@ if (!apiBaseUrl) {
   console.error("NEXT_PUBLIC_API_BASE_URL is not configured for this build profile.");
 }
 
-const driveUrl = appMode === "stage" ? "https://stage-drive.nevtan.com/" : "https://drive.nevtan.com/";
+const isStage = appMode === "stage";
 
-// NevTan Workspace hosts the suite's list prices (/pricing) that the reseller discount applies to.
-const workspaceUrl = appMode === "stage" ? "https://stage-workspace.nevtan.com" : "https://workspace.nevtan.com";
+// NevTan Workspace sells the plans resellers buy; its /pricing page and public pricing API are the
+// source of every list price on this site.
+const workspaceUrl = isStage ? "https://stage-workspace.nevtan.com" : "https://workspace.nevtan.com";
+const workspaceApiBaseUrl = (
+  process.env.NEXT_PUBLIC_WORKSPACE_API_BASE ||
+  (isStage ? "https://stage-api-workspace.nevtan.com" : "https://api-workspace.nevtan.com")
+).replace(/\/+$/, "");
 
 // The Mail site hosts NevTan's contact form and legal pages.
 const mailSiteUrl = "https://mail.nevtan.com";
@@ -17,12 +22,15 @@ const mailSiteUrl = "https://mail.nevtan.com";
 export const endPoints = {
   apiBaseUrl,
   siteUrl,
-  driveUrl,
   workspaceUrl,
+  workspaceApiBaseUrl,
   mailSiteUrl,
+  contactUrl: `${mailSiteUrl}/contact`,
+  salesEmail: "sales@nevtan.com",
 
   api: {
     RESELLER_APPLICATIONS: "api/public/reseller-applications",
   },
   mode: appMode,
+  isStage,
 };

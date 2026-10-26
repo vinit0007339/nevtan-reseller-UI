@@ -1,6 +1,15 @@
 import { endPoints } from "../constant/Environment";
+import { PRODUCT_SLUGS } from "../constant/productPages";
 
-const PUBLIC_ROUTES = [{ path: "/", changefreq: "monthly", priority: "1.0" }];
+const PUBLIC_ROUTES = [
+  { path: "/", changefreq: "weekly", priority: "1.0" },
+  { path: "/pricing", changefreq: "weekly", priority: "0.9" },
+  { path: "/apply", changefreq: "monthly", priority: "0.9" },
+  { path: "/products", changefreq: "monthly", priority: "0.8" },
+  ...PRODUCT_SLUGS.map((slug) => ({ path: `/products/${slug}`, changefreq: "monthly", priority: "0.7" })),
+  { path: "/how-it-works", changefreq: "monthly", priority: "0.7" },
+  { path: "/faq", changefreq: "monthly", priority: "0.6" },
+];
 
 function escapeXml(str) {
   return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");

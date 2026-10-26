@@ -1,5 +1,20 @@
 import { createTheme } from "@mui/material/styles";
 
+// Brand colours used directly in sx props across the site.
+export const tokens = {
+  teal: "#0f766e",
+  tealBright: "#14b8a6",
+  tealDark: "#0d645d",
+  mint: "#f0fdfa",
+  mintStrong: "#ccfbf1",
+  ink: "#0f172a",
+  body: "#334155",
+  muted: "#64748b",
+  border: "#e2e8f0",
+  tint: "#f8fafc",
+  deep: "#0b322f",
+};
+
 // Same palette and type scale as the other NevTan sites.
 const theme = createTheme({
   palette: {

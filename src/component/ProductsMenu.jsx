@@ -1,40 +1,32 @@
 import React, { useState } from "react";
-import { Box, Button, Divider, Menu, Stack, Typography } from "@mui/material";
+import Link from "next/link";
+import { Box, Button, Chip, Divider, Menu, Stack, Typography } from "@mui/material";
 import {
-  AppsOutlined as AppsIcon,
+  ArrowForwardRounded as ArrowIcon,
   KeyboardArrowDownRounded as ArrowDownIcon,
-  OpenInNewRounded as OpenIcon,
 } from "@mui/icons-material";
-import { NEVTAN_PRODUCTS } from "../constant/products";
+import AppIcon from "./AppIcon";
+import { APPS } from "../constant/products";
+import { tokens } from "../theme";
 
-const GREEN = "#0f766e";
-const MINT = "#f0fdfa";
-const INK = "#0f172a";
-const MUTED = "#64748b";
-const BORDER = "#e2e8f0";
-
-/** "Products" dropdown listing the full NevTan suite; every product opens in a new tab. */
-const ProductsMenu = ({ buttonSx }) => {
+/** "Products" dropdown: every NevTan app, each linking to its page on this site. */
+const ProductsMenu = ({ active }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
-  const handleOpen = (e) => setAnchorEl(e.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+  const close = () => setAnchorEl(null);
 
   return (
     <>
       <Button
-        onClick={handleOpen}
-        startIcon={<AppsIcon />}
+        onClick={(e) => setAnchorEl(e.currentTarget)}
         endIcon={<ArrowDownIcon sx={{ transition: "transform 0.2s ease", transform: open ? "rotate(180deg)" : "none" }} />}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         sx={{
-          textTransform: "none",
-          color: "#334155",
-          fontWeight: 700,
-          "&:hover": { color: GREEN, bgcolor: MINT },
-          ...buttonSx,
+          color: active ? tokens.teal : tokens.body,
+          fontWeight: active ? 800 : 600,
+          px: 1.5,
+          "&:hover": { color: tokens.teal, bgcolor: tokens.mint },
         }}
       >
         Products
@@ -43,7 +35,7 @@ const ProductsMenu = ({ buttonSx }) => {
       <Menu
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={close}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         transformOrigin={{ vertical: "top", horizontal: "left" }}
         slotProps={{
@@ -51,102 +43,70 @@ const ProductsMenu = ({ buttonSx }) => {
             elevation: 0,
             sx: {
               mt: 1,
-              width: { xs: 300, sm: 380 },
+              width: 560,
               maxWidth: "calc(100vw - 24px)",
               borderRadius: 3,
-              border: "1px solid",
-              borderColor: BORDER,
+              border: `1px solid ${tokens.border}`,
               boxShadow: "0 24px 60px rgba(15, 23, 42, 0.18)",
-              overflow: "hidden",
-              p: 1,
+              p: 1.5,
             },
           },
         }}
         MenuListProps={{ sx: { p: 0 } }}
       >
-        <Box sx={{ px: 1.5, pt: 1, pb: 1 }}>
-          <Typography sx={{ fontSize: 11, fontWeight: 800, letterSpacing: 0.6, textTransform: "uppercase", color: GREEN }}>
-            The NevTan suite
-          </Typography>
-          <Typography sx={{ fontSize: 12, color: MUTED, mt: 0.25 }}>
-            One reseller account across every NevTan product.
-          </Typography>
-        </Box>
-
-        <Stack spacing={0.25}>
-          {NEVTAN_PRODUCTS.map((p) => (
+        <Typography sx={{ px: 1.5, pt: 0.5, pb: 1, fontSize: 11, fontWeight: 800, letterSpacing: 0.8, textTransform: "uppercase", color: tokens.teal }}>
+          Everything you can resell
+        </Typography>
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 0.5 }}>
+          {APPS.map((app) => (
             <Box
-              key={p.name}
-              component="a"
-              href={p.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleClose}
+              key={app.code}
+              component={Link}
+              href={`/products/${app.slug}`}
+              onClick={close}
               sx={{
                 display: "flex",
                 alignItems: "center",
-                textAlign: "left",
-                width: "100%",
+                gap: 1.5,
                 px: 1.5,
                 py: 1.25,
                 borderRadius: 2,
                 textDecoration: "none",
                 transition: "background-color 0.15s ease",
-                "&:hover": { bgcolor: "#f1f5f9" },
+                "&:hover": { bgcolor: tokens.tint },
               }}
             >
-              <Stack direction="row" spacing={1.5} alignItems="center" sx={{ width: "100%" }}>
-                <Box
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    flexShrink: 0,
-                    borderRadius: 2,
-                    bgcolor: MINT,
-                    border: "1px solid",
-                    borderColor: BORDER,
-                    display: "grid",
-                    placeItems: "center",
-                  }}
-                >
-                  <Box component="img" src={p.icon} alt="" sx={{ width: 24, height: 24, objectFit: "contain" }} />
-                </Box>
-                <Box sx={{ minWidth: 0, flex: 1 }}>
-                  <Stack direction="row" spacing={0.75} alignItems="center">
-                    <Typography sx={{ fontSize: 13.5, fontWeight: 800, color: INK }}>{p.name}</Typography>
-                    <OpenIcon sx={{ fontSize: 13, color: "#94a3b8" }} />
-                  </Stack>
-                  <Typography sx={{ fontSize: 11.5, color: MUTED, lineHeight: 1.45, mt: 0.25 }}>{p.desc}</Typography>
-                </Box>
-              </Stack>
+              <AppIcon app={app} size={38} />
+              <Box sx={{ minWidth: 0 }}>
+                <Stack direction="row" spacing={0.75} alignItems="center">
+                  <Typography sx={{ fontSize: 14, fontWeight: 800, color: tokens.ink }}>{app.title}</Typography>
+                  {app.free && (
+                    <Chip label="Free" size="small" sx={{ height: 18, fontSize: 10, bgcolor: tokens.mintStrong, color: tokens.tealDark }} />
+                  )}
+                </Stack>
+                <Typography sx={{ fontSize: 12, color: tokens.muted, lineHeight: 1.4 }}>{app.description}</Typography>
+              </Box>
+            </Box>
+          ))}
+        </Box>
+        <Divider sx={{ my: 1 }} />
+        <Stack direction="row" justifyContent="space-between" sx={{ px: 1.5, py: 0.5 }}>
+          {[
+            { label: "All products", href: "/products" },
+            { label: "Reseller pricing", href: "/pricing" },
+          ].map((link) => (
+            <Box
+              key={link.href}
+              component={Link}
+              href={link.href}
+              onClick={close}
+              sx={{ display: "inline-flex", alignItems: "center", gap: 0.5, color: tokens.teal, fontWeight: 700, fontSize: 13, textDecoration: "none" }}
+            >
+              {link.label}
+              <ArrowIcon sx={{ fontSize: 16 }} />
             </Box>
           ))}
         </Stack>
-
-        <Divider sx={{ my: 1 }} />
-        <Box
-          component="a"
-          href="https://nevtan.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleClose}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            px: 1.5,
-            py: 1,
-            borderRadius: 2,
-            textDecoration: "none",
-            color: GREEN,
-            fontWeight: 700,
-            fontSize: 13,
-            "&:hover": { bgcolor: MINT },
-          }}
-        >
-          Explore the full NevTan suite
-          <OpenIcon sx={{ fontSize: 15 }} />
-        </Box>
       </Menu>
     </>
   );
